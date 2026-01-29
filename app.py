@@ -1,7 +1,5 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
 from datetime import datetime
 import pipeline_functions as pf
 
@@ -46,8 +44,13 @@ st.markdown("""
 
 # Sidebar Navigation
 with st.sidebar:
-    st.image("https://cdn-icons-png.flaticon.com/512/2103/2103655.png", width=100)
-    st.title("Portfolio Dashboard")
+    st.markdown("""
+    <div style="text-align: center;">
+        <span style="font-size: 3rem;">📊</span>
+        <h2>Portfolio Dashboard</h2>
+    </div>
+    """, unsafe_allow_html=True)
+    
     selected_page = st.radio(
         "Navigate to:",
         ["🏠 Home", "📈 Top Apps Pipeline", "📊 Data Visualizations", 
@@ -83,7 +86,11 @@ if selected_page == "🏠 Home":
         """)
     
     with col2:
-        st.image("https://cdn-icons-png.flaticon.com/512/2103/2103655.png", width=200)
+        st.markdown("""
+        <div style="text-align: center; padding: 2rem;">
+            <span style="font-size: 8rem;">📊</span>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Quick Stats
     st.markdown("### 📈 Quick Stats")
@@ -225,60 +232,61 @@ elif selected_page == "📈 Top Apps Pipeline":
 elif selected_page == "📊 Data Visualizations":
     st.markdown('<h1 class="main-header">📊 Interactive Data Visualizations</h1>', unsafe_allow_html=True)
     
-    # Sample data for visualization (replace with your actual data)
+    # Sample data for visualization
     st.markdown('<div class="portfolio-section">', unsafe_allow_html=True)
     
-    # Load sample data or create dummy data
+    # Create sample data
     @st.cache_data
     def create_sample_data():
-        categories = CATEGORIES
+        categories = ["ART_AND_DESIGN", "AUTO_AND_VEHICLES", "BEAUTY", "BOOKS_AND_REFERENCE",
+                     "BUSINESS", "COMICS", "COMMUNICATION", "DATING", "EDUCATION"]
         data = {
             'Category': categories,
-            'Avg_Rating': [4.2 + 0.1 * i for i in range(len(categories))],
-            'Total_Reviews': [10000 + i * 5000 for i in range(len(categories))],
-            'Number_of_Apps': [50 + i * 10 for i in range(len(categories))]
+            'Avg_Rating': [4.2, 4.0, 4.5, 4.3, 4.1, 4.6, 4.4, 3.9, 4.7],
+            'Total_Reviews': [15000, 12000, 18000, 9000, 22000, 8000, 25000, 11000, 14000],
+            'Number_of_Apps': [60, 45, 75, 50, 85, 40, 90, 55, 70]
         }
         return pd.DataFrame(data)
     
     viz_data = create_sample_data()
     
-    # Visualization 1: Bar Chart
+    # Visualization 1: Bar Chart using Streamlit
     st.markdown("### 📊 Category Performance")
-    fig1 = px.bar(
-        viz_data,
-        x='Category',
-        y='Avg_Rating',
-        color='Total_Reviews',
-        title='Average Rating by Category',
-        color_continuous_scale='viridis'
-    )
-    st.plotly_chart(fig1, use_container_width=True)
     
-    # Visualization 2: Scatter Plot
+    # Simple bar chart using Streamlit's native bar_chart
+    chart_data = pd.DataFrame({
+        'Average Rating': viz_data.set_index('Category')['Avg_Rating']
+    })
+    st.bar_chart(chart_data)
+    
+    # Visualization 2: Metrics and Tables
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("### 🔍 Reviews vs Rating")
-        fig2 = px.scatter(
-            viz_data,
-            x='Total_Reviews',
-            y='Avg_Rating',
-            size='Number_of_Apps',
-            color='Category',
-            hover_name='Category',
-            title='Reviews vs Rating Distribution'
-        )
-        st.plotly_chart(fig2, use_container_width=True)
+        st.markdown("### 🔍 Category Insights")
+        
+        # Show top categories by rating
+        st.markdown("**Top 3 Categories by Rating:**")
+        top_categories = viz_data.nlargest(3, 'Avg_Rating')
+        for idx, row in top_categories.iterrows():
+            st.markdown(f"- **{row['Category']}**: {row['Avg_Rating']:.1f} ⭐")
+        
+        st.divider()
+        
+        # Show metrics
+        avg_all_rating = viz_data['Avg_Rating'].mean()
+        total_all_reviews = viz_data['Total_Reviews'].sum()
+        
+        st.metric("Overall Average Rating", f"{avg_all_rating:.2f}")
+        st.metric("Total Reviews Across All", f"{total_all_reviews:,}")
     
     with col2:
-        st.markdown("### 🎯 Category Distribution")
-        fig3 = px.pie(
-            viz_data,
-            values='Number_of_Apps',
-            names='Category',
-            title='App Distribution by Category'
-        )
-        st.plotly_chart(fig3, use_container_width=True)
+        st.markdown("### 📋 Data Table")
+        st.dataframe(viz_data, use_container_width=True)
+    
+    # Add a line chart for trend
+    st.markdown("### 📈 Reviews Distribution")
+    st.line_chart(viz_data.set_index('Category')['Total_Reviews'])
     
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -337,7 +345,13 @@ elif selected_page == "👤 About Me":
     col1, col2 = st.columns([1, 2])
     
     with col1:
-        st.image("https://cdn-icons-png.flaticon.com/512/3135/3135715.png", width=200)
+        st.markdown("""
+        <div style="text-align: center;">
+            <span style="font-size: 8rem;">👨‍💻</span>
+            <h3>Data Scientist</h3>
+        </div>
+        """, unsafe_allow_html=True)
+        
         st.markdown("""
         ### Contact Info
         📧 email@example.com  
@@ -371,23 +385,23 @@ elif selected_page == "👤 About Me":
         - Databricks Data Engineer Associate
         """)
     
-    # Skills Chart
+    # Skills using progress bars
     st.markdown("### 📊 Technical Skills")
-    skills_data = pd.DataFrame({
-        'Skill': ['Python', 'SQL', 'Data Visualization', 'ML/AI', 'Cloud Platforms', 'Data Pipelines'],
-        'Proficiency': [95, 90, 85, 80, 75, 90]
-    })
     
-    fig = px.bar(
-        skills_data,
-        x='Proficiency',
-        y='Skill',
-        orientation='h',
-        color='Proficiency',
-        color_continuous_scale='viridis',
-        title='Technical Proficiency Levels'
-    )
-    st.plotly_chart(fig, use_container_width=True)
+    skills = {
+        'Python': 95,
+        'SQL': 90,
+        'Data Visualization': 85,
+        'ML/AI': 80,
+        'Cloud Platforms': 75,
+        'Data Pipelines': 90
+    }
+    
+    for skill, level in skills.items():
+        st.write(f"**{skill}**")
+        st.progress(level/100)
+        st.write(f"{level}%")
+        st.write("")
 
 # Footer
 st.divider()
