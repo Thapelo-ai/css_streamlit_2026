@@ -290,6 +290,7 @@ with st.expander("📖 How to Play & Tips", expanded=False):
 
 # Footer
 st.markdown("---")
-st.markdown("<div style='text-align: center; color: #665;'>God loves YOU!• Good luck! 🍀</div>", unsafe_allow_html=True)
+st.markdown("<div style='text-align: center; color: #665;'>God loves YOU! Good luck! 🍀</div>", unsafe_allow_html=True)
+
 
 
