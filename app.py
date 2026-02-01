@@ -3,11 +3,11 @@ import random
 
 # Initialize session state variables
 if 'target_number' not in st.session_state:
-    st.session_state.target_number = random.randint(1, 100)
+    st.session_state.target_number = random.randint(1, 50)
 if 'attempts' not in st.session_state:
     st.session_state.attempts = 0
 if 'max_attempts' not in st.session_state:
-    st.session_state.max_attempts = 7
+    st.session_state.max_attempts = 5
 if 'game_over' not in st.session_state:
     st.session_state.game_over = False
 if 'message' not in st.session_state:
@@ -21,7 +21,7 @@ if 'score' not in st.session_state:
 
 # Page configuration
 st.set_page_config(
-    page_title="Number Guessing Game",
+    page_title="Test Your Brains Game",
     page_icon="🎮",
     layout="centered"
 )
@@ -121,8 +121,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Game title
-st.markdown("<h1 class='main-title'>🎯 Number Guessing Game</h1>", unsafe_allow_html=True)
-st.markdown("<p class='subtitle'>Guess the number between 1 and 100. You have 7 attempts!</p>", unsafe_allow_html=True)
+st.markdown("<h1 class='main-title'>🎯 Test Your Brains Game</h1>", unsafe_allow_html=True)
+st.markdown("<p class='subtitle'>Guess the number between 1 and 50. You have 5 attempts!</p>", unsafe_allow_html=True)
 
 # Main game container
 with st.container():
@@ -170,10 +170,10 @@ with st.container():
         col1, col2 = st.columns([2, 1])
         with col1:
             guess = st.number_input(
-                "Enter your guess (1-100):",
+                "Enter your guess (1-50):",
                 min_value=1,
-                max_value=100,
-                value=50,
+                max_value=50,
+                value=25,
                 step=1,
                 key="guess_input"
             )
@@ -196,7 +196,7 @@ with st.container():
         with hint_col2:
             if st.button("Show Range Hint 📊", use_container_width=True):
                 lower_bound = max(1, st.session_state.target_number - 10)
-                upper_bound = min(100, st.session_state.target_number + 10)
+                upper_bound = min(50, st.session_state.target_number + 10)
                 st.session_state.message = f"Hint: The number is between {lower_bound} and {upper_bound}."
                 st.rerun()
         
@@ -208,9 +208,9 @@ with st.container():
             if guess == st.session_state.target_number:
                 st.session_state.game_over = True
                 # Calculate score: more attempts = lower score
-                score_earned = max(1, 100 - (st.session_state.attempts * 10))
+                score_earned = max(1, 50 - (st.session_state.attempts * 10))
                 st.session_state.score += score_earned
-                st.session_state.message = f"🎉 Congratulations! You guessed the number {st.session_state.target_number} in {st.session_state.attempts} attempts! You earned {score_earned} points."
+                st.session_state.message = f"🎉 <strong>Congratulations</strong>! You guessed the number {st.session_state.target_number} in {st.session_state.attempts} attempts👌! You earned {score_earned} points😊."
             elif guess < st.session_state.target_number:
                 st.session_state.message = f"📈 Too low! Try a higher number."
             else:
@@ -219,7 +219,7 @@ with st.container():
             # Check if max attempts reached
             if st.session_state.attempts >= st.session_state.max_attempts and not st.session_state.game_over:
                 st.session_state.game_over = True
-                st.session_state.message = f"💀 Game Over! The number was {st.session_state.target_number}. Better luck next time!"
+                st.session_state.message = f"💀 Ouch Game Over! The number was {st.session_state.target_number}. Better luck next time😂!"
             
             st.rerun()
     else:
@@ -228,7 +228,7 @@ with st.container():
         with col2:
             if st.button("🎮 Play Again", use_container_width=True):
                 # Reset game state
-                st.session_state.target_number = random.randint(1, 100)
+                st.session_state.target_number = random.randint(1, 50)
                 st.session_state.attempts = 0
                 st.session_state.game_over = False
                 st.session_state.message = ""
@@ -264,8 +264,8 @@ with st.expander("📖 How to Play & Tips", expanded=False):
     <div class="instructions">
     <h4>Game Rules:</h4>
     <ol>
-        <li>I'm thinking of a number between <strong>1 and 100</strong>.</li>
-        <li>You have <strong>7 attempts</strong> to guess the correct number.</li>
+        <li>Think of a number between <strong>1 and 50</strong>.</li>
+        <li>You have <strong>5 attempts</strong> to guess the correct number.</li>
         <li>After each guess, I'll tell you if your guess was too high or too low.</li>
         <li>You can use hints to help you, but try to solve it with as few hints as possible!</li>
     </ol>
@@ -280,14 +280,16 @@ with st.expander("📖 How to Play & Tips", expanded=False):
     
     <h4>Pro Tips:</h4>
     <ul>
-        <li>Start with a guess in the middle (50) to split the range in half</li>
+        <li>Start with a guess in the middle (25) to split the range in half</li>
         <li>Use the "too high"/"too low" feedback to eliminate half the possibilities each time</li>
         <li>Save hints for when you're really stuck!</li>
+        <li>Good luck, buddy!😎</li>
     </ul>
     </div>
     """, unsafe_allow_html=True)
 
 # Footer
 st.markdown("---")
-st.markdown("<div style='text-align: center; color: #666;'>Made with Streamlit • Good luck! 🍀</div>", unsafe_allow_html=True)
+st.markdown("<div style='text-align: center; color: #665;'>God loves YOU!• Good luck! 🍀</div>", unsafe_allow_html=True)
+
 
