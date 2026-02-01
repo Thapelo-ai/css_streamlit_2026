@@ -37,7 +37,7 @@ st.markdown("""
     }
     .subtitle {
         text-align: center;
-        color: #666;
+        color: #665;
         font-size: 1.2rem;
         margin-bottom: 2rem;
     }
@@ -290,3 +290,4 @@ with st.expander("📖 How to Play & Tips", expanded=False):
 # Footer
 st.markdown("---")
 st.markdown("<div style='text-align: center; color: #666;'>Made with Streamlit • Good luck! 🍀</div>", unsafe_allow_html=True)
+
